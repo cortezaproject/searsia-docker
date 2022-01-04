@@ -1,0 +1,37 @@
+version: '3.5'
+
+services:
+  server:
+    # Only placeholder tags, we're not actually using dockerhub for this
+    image: cortezaproject/searsia-server:latest
+    build: server
+    restart: always
+    command: [ "-m", "http://localhost" ]
+#     -c,--cache <arg>      Set cache size (integer: number of result pages).
+#     -d,--dontshare        Do not share resource definitions.
+#     -e,--export           Export index to stdout and exit.
+#     -h,--help             Show help.
+#     -i,--interval <arg>   Set poll interval (integer: in seconds).
+#     -l,--log <arg>        Set log level (0=off, 1=error, 2=warn=default,
+#                           3=info, 4=debug).
+#     -m,--mother <arg>     Set url of mother's api web service end point.
+#     -n,--nohealth         Do not share health report.
+#     -p,--path <arg>       Set directory path to store the index.
+#     -q,--quiet            No output to console.
+#     -t,--test <arg>       Print test output and exit (string: 'json', 'xml',
+#                           'response', 'all').
+#     -u,--url <arg>        Set url of my api web service endpoint.
+    environment:
+      VIRTUAL_HOST: server-${DOMAIN}
+      LETSENCRYPT_HOST: server-${DOMAIN}
+
+  client:
+    # Only placeholder tags, we're not actually using dockerhub for this
+    image: cortezaproject/searsia-client:latest
+    build: client
+    restart: always
+    ports:
+      - "55000:80"
+    environment:
+      VIRTUAL_HOST: ${DOMAIN}
+      LETSENCRYPT_HOST: ${DOMAIN}
